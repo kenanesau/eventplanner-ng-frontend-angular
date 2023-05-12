@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import {CommonModule, NgSwitch, NgSwitchCase} from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatSlideToggleModule, NgSwitch, NgSwitchCase],
+  imports: [CommonModule, RouterOutlet, MatSlideToggleModule, NgSwitch, NgSwitchCase, DashboardComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

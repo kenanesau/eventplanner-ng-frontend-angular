@@ -1,0 +1,7 @@
+<mat-card *ngIf="event">
+  <mat-card-title>{{event.name}}</mat-card-title>
+  <mat-card-header>{{event.startTime | date: 'dd.MM.yyyy HH:mm'}} - {{event.endTime | date: 'dd.MM.yyyy HH:mm'}}</mat-card-header>
+  <mat-card-content>
+    put more content here...
+  </mat-card-content>
+</mat-card>
