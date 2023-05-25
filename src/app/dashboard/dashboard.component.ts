@@ -3,6 +3,13 @@ import {CommonModule, NgFor} from '@angular/common';
 import {EventComponent} from "../event/event.component";
 import {Event} from "../shared/event";
 import {EventStoreService} from "../shared/event-store.service";
+import {
+  from,
+  map,
+  switchMap,
+  toArray,
+} from "rxjs";
+import {DateRange} from "@angular/material/datepicker";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +22,16 @@ export class DashboardComponent {
   events: Event[] = [];
 
   constructor(private evService: EventStoreService) {
-    this.evService.getAll().subscribe(
+
+    this.evService.getAll()
+      .pipe(
+        switchMap( evAr => from(evAr)),
+        map(ev => {
+          ev.range = new DateRange<Date>(new Date(ev.startTime), new Date(ev.endTime))
+          return ev;
+        }),
+        toArray()
+     ).subscribe(
       (events) => this.events=events
     );
 
