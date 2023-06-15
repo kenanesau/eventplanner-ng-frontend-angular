@@ -7,5 +7,5 @@ export interface Event {
   endTime: string;
   places: Place[];
 
-  range: DateRange<Date>;
+  range: DateRange<Date> | null;
 }
