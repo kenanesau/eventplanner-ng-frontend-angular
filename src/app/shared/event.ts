@@ -1,5 +1,4 @@
 import {Place} from "./place";
-import {DateRange} from "@angular/material/datepicker";
 
 export interface Event {
   name: string;
@@ -7,5 +6,4 @@ export interface Event {
   endTime: string;
   places: Place[];
 
-  range: DateRange<Date> | null;
 }

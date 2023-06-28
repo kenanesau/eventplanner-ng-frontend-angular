@@ -1,0 +1,8 @@
+<form [formGroup]="timeForm" (ngSubmit)="submitForm()">
+  <div class="form-group">
+    <input type="number" formControlName="hours" class="form-control" id="hoursInput"/>
+    <input type="number" formControlName="minutes" class="form-control" id="minutesInput"/>
+  </div>
+</form>
+
+<pre>{{ timeForm.value | json }}</pre>
