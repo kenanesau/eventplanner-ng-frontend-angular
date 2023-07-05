@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgFor} from '@angular/common';
-import {EventComponent} from "../event-create/event.component";
+import {EventFormComponent} from "../event-form/event-form.component";
 import {Event} from "../shared/event";
 import {EventStoreService} from "../shared/event-store.service";
 import {
@@ -9,11 +9,12 @@ import {
   switchMap,
   toArray,
 } from "rxjs";
+import {EventComponent} from "../event/event.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, EventComponent, NgFor],
+  imports: [CommonModule, EventComponent, NgFor, EventComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

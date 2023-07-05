@@ -1,4 +1,10 @@
 <div class="container">
   <h1>{{title}}</h1>
+  <nav class="mb-4">
+    <div>
+      <a routerLink="/events" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="me-4">Dashboard</a>
+      <a routerLink="/events/create" routerLinkActive="active" class="me-4">Event anlegen</a>
+    </div>
+  </nav>
   <router-outlet></router-outlet>
 </div>
