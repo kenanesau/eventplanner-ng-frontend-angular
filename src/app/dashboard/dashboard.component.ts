@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgFor} from '@angular/common';
-import {EventFormComponent} from "../event-form/event-form.component";
 import {Event} from "../shared/event";
 import {EventStoreService} from "../shared/event-store.service";
 import {
