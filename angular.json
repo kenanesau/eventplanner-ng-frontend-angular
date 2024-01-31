@@ -40,9 +40,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "node_modules/bootstrap/scss/bootstrap.scss",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -83,10 +81,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "EventPlanner:build:production"
+              "buildTarget": "EventPlanner:build:production"
             },
             "development": {
-              "browserTarget": "EventPlanner:build:development"
+              "buildTarget": "EventPlanner:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -94,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "EventPlanner:build"
+            "buildTarget": "EventPlanner:build"
           }
         },
         "test": {

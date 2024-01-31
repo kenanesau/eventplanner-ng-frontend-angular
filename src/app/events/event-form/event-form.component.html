@@ -1,4 +1,4 @@
-<form class="row g-3">
+<!--form class="row g-3">
 
   <div class="col-md-6">
     <label for="inputEmail4" class="form-label">Email</label>
@@ -42,19 +42,21 @@
   <div class="col-12">
     <button type="submit" class="btn btn-primary">Sign in</button>
   </div>
-</form>
-
-<!--form [formGroup]="eventForm" (ngSubmit)="submitForm()" *ngIf="event" class="row g-3">
-    <div class="col-md-6">
-      <label for="startInput">Startzeit</label>
-      <input id="startInput" type="datetime-local" formControlName="startTime" />
-    </div>
-    <div class="col-md-6">
-      <label for="endInput">Endzeit</label>
-      <input id="endInput" type="datetime-local" formControlName="endTime" />
-    </div>
 </form-->
-
+<form [formGroup]="eventForm" (ngSubmit)="submitForm()" *ngIf="event" class="row g-3">
+      <div class="col-12">
+        <label class="form-label" for="eventName">Event-Name</label>
+        <input class="form-control" id="eventName" type="text" formControlName="name" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="startInput">Startzeit</label>
+        <input class="form-control" id="startInput" type="datetime-local" formControlName="startTime" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="endInput">Endzeit</label>
+        <input class="form-control" id="endInput" type="datetime-local" formControlName="endTime" />
+      </div>
+</form>
 
 
 <!--form *ngIf="event" class="row g-3 ep-card">
