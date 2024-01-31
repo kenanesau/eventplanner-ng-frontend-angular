@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DatePipe, NgIf} from '@angular/common';
 import {Event} from "../shared/event";
 import {TimeSelectComponent} from "../time-select/time-select.component";
@@ -12,4 +12,9 @@ import {TimeSelectComponent} from "../time-select/time-select.component";
 })
 export class EventComponent {
   @Input() event?: Event;
+  @Output() editEvent = new EventEmitter<Event>();
+
+  doEditEvent() {
+    this.editEvent.emit(this.event);
+  }
 }

@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import {CommonModule, NgSwitch, NgSwitchCase} from '@angular/common';
+import {ChangeDetectorRef, Component, Input, OnDestroy} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {DashboardComponent} from "./dashboard/dashboard.component";
 import {HttpClientModule} from "@angular/common/http";
 
 @Component({
-  selector: 'app-root',
+  selector: 'ep-root',
   standalone: true,
-  imports: [CommonModule, RouterLinkActive, RouterLink, RouterOutlet, NgSwitch, NgSwitchCase, DashboardComponent, HttpClientModule],
+  imports: [RouterLinkActive, RouterLink, RouterOutlet, HttpClientModule],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'EventPlanner';

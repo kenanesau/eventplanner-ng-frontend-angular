@@ -1,0 +1,26 @@
+<div *ngIf="event" class="ep-card">
+  <div class="card-header d-flex flex-row">
+    <div class="flex-grow-1">
+      <h5 class="card-title col-md-8">{{event.name}}</h5>
+      <div class="card-subtitle col-md-8">{{event.startTime | date: 'dd.MM.yyyy HH:mm'}} - {{event.endTime | date: 'dd.MM.yyyy HH:mm'}}</div>
+    </div>
+    <div class="float-end flex-shrink-0" >
+      <button type="button" (click)="doEditEvent()" class="btn btn-primary">
+          <i class="bi bi-pencil"></i>
+        </button>
+    </div>
+  </div>
+  <div class="row g-0">
+    <div class="col-md-4">
+      <!-- image -->
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        put more content here...
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
