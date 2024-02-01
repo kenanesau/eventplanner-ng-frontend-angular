@@ -13,19 +13,27 @@
       <input class="form-control" id="endInput" type="datetime-local" formControlName="endTime" />
     </div>
     <div class="col-12">
+      <div class="row g-3">
       <ng-container formArrayName="places">
         <ng-container *ngFor="let selectedPlace of places.controls; let i = index">
-          <div class="row">
-            <select class="form-select" aria-label="Ort-Auswahl">
+          <div class="col-md-11 col-sd-4">
+            <select class="form-select" aria-label="Ort-Auswahl" (change)="onSelect($event)">
               <option selected>Auswahl</option>
-              <option *ngFor="let place of availablePlaces" value="{{place.id}}">{{place.name}}</option>
+              <option *ngFor="let place of availablePlaces"
+                      [value]="place.id" [disabled]="isSelectedPlace(place)">{{place.name}}</option>
             </select>
+          </div>
+          <div class="col-md-1 cols-sd-2">
+            <button type="button" class="btn btn-primary" (click)="deletePlace(i)"><i class="bi bi-dash-circle"></i></button>
           </div>
         </ng-container>
       </ng-container>
+      </div>
     </div>
-
-  </form><
+    <div class="col-12">
+      <button type="button" class="btn btn-primary" (click)="addPlace()"><i class="bi bi-plus-circle"></i></button>
+    </div>
+  </form>
 </ng-container>
 
 <ng-template #loading>

@@ -38,6 +38,7 @@ export class EventFormComponent {
     ]
   }
   availablePlaces$: Observable<Place[]>;
+  selectedPlaces: bigint[] = [];
 
   constructor(private fb: FormBuilder, private placeService: PlaceStoreService) {
     this.availablePlaces$ = this.placeService.getAll();
@@ -89,5 +90,12 @@ export class EventFormComponent {
     this.changedEvent.emit(newEvent);**/
   }
 
+  isSelectedPlace(place: Place): boolean {
+    return this.selectedPlaces.includes(place.id);
+  }
 
+  onSelect(event: any) {
+    this.selectedPlaces.push(event.target.value);
+    console.log(this.selectedPlaces);
+  }
 }
