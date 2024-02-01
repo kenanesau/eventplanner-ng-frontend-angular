@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {CommonModule, NgFor} from '@angular/common';
-import {Event} from "../shared/event";
-import {EventStoreService} from "../shared/event-store.service";
+import {Event} from "../../shared/event";
+import {EventStoreService} from "../../shared/event-store.service";
 import {
   from,
   map,

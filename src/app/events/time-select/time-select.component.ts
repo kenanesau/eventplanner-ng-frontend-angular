@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {createEventTimeValidator} from "../shared/validators";
+import {createEventTimeValidator} from "../../shared/validators";
 
 @Component({
   selector: 'ep-time-select',

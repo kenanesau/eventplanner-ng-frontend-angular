@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {EventFormComponent} from "../event-form/event-form.component";
-import {EventStoreService} from "../shared/event-store.service";
+import {EventStoreService} from "../../shared/event-store.service";
 import {Router} from "@angular/router";
-import {Event} from "../shared/event"
+import {Event} from "../../shared/event"
 
 @Component({
   selector: 'ep-event-create',
