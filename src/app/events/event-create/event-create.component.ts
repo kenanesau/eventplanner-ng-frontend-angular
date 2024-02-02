@@ -17,6 +17,6 @@ export class EventCreateComponent {
 
   doCreateEvent(changedEvent: Event) {
     this.evService.create(changedEvent).subscribe(
-      createdEvent => this.router.navigate(['', createdEvent.id]))
+      createdEvent => this.router.navigate(['/events']))
   }
 }

@@ -1,5 +1,5 @@
 export interface Place {
-  id: bigint;
+  id: number;
   name: string;
   locked: boolean;
   lockedComment: string;

@@ -1,7 +1,7 @@
 import {Place} from "./place";
 
 export interface Event {
-  id: bigint;
+  id: number;
   name: string;
   startTime: string;
   endTime: string;

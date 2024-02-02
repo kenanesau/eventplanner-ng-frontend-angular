@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Event} from "../../shared/event";
 import {Place} from "../../shared/place";
 import {
@@ -13,24 +13,24 @@ import {
 } from "@angular/forms";
 import {TimeSelectComponent} from "../time-select/time-select.component";
 import {PlaceStoreService} from "../../shared/place-store.service";
-import {Observable} from "rxjs";
+import {map, Observable, switchMap} from "rxjs";
 
 @Component({
   selector: 'ep-event-form',
   standalone: true,
-  imports: [NgIf, DatePipe, FormsModule, ReactiveFormsModule, TimeSelectComponent, NgForOf, AsyncPipe],
+  imports: [NgIf, DatePipe, FormsModule, ReactiveFormsModule, TimeSelectComponent, NgForOf, AsyncPipe, JsonPipe],
   templateUrl: './event-form.component.html',
   styleUrls: ['./event-form.component.scss']
 })
 export class EventFormComponent {
   _event: Event = {
-    id: -1n,
+    id: -1,
     name: '',
     startTime: new Date().toDateString(),
     endTime: new Date().toDateString(),
     places: [
       {
-        id: -1n,
+        id: -1,
         name: '',
         locked: false,
         lockedComment: '',
@@ -38,7 +38,7 @@ export class EventFormComponent {
     ]
   }
   availablePlaces$: Observable<Place[]>;
-  selectedPlaces: bigint[] = [];
+  selectedPlaces: number[] = [];
 
   constructor(private fb: FormBuilder, private placeService: PlaceStoreService) {
     this.availablePlaces$ = this.placeService.getAll();
@@ -69,33 +69,51 @@ export class EventFormComponent {
     places: this.fb.array([])
   });
 
-  get places(): FormArray {
+  get places(): FormArray<FormGroup> {
     return this.eventForm.controls["places"] as FormArray;
   }
 
   addPlace() {
-    const placeForm = this.fb.group({
-      name: ['', Validators.required]
+    const placeForm:FormGroup = this.fb.group({
+      placeId: ['', Validators.required]
     });
 
-    this.places.push(placeForm);
+    this.places.push(placeForm as FormGroup);
   }
 
   deletePlace(placeIndex: number) {
     this.places.removeAt(placeIndex);
+    this.selectedPlaces[placeIndex]=-1;
   }
 
   submitForm() {
-    /*const newEvent: Event = {id: -1n, ...this.eventForm.getRawValue()};
-    this.changedEvent.emit(newEvent);**/
+    const bookedPlaces: Place[] = [];
+
+    this.availablePlaces$.subscribe(
+        allPlaces => {
+          this.eventForm.controls.places.controls.forEach(
+            value => {
+              if (typeof value === 'object' && value!==undefined) {
+                const id: number = Number(value.get("placeId")?.value);
+                const place: Place|undefined = allPlaces.filter( place => place.id === id ).pop()
+                if (typeof place !== 'undefined') {
+                  bookedPlaces.push(place)
+                }
+                const newEvent: Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
+                this.changedEvent.emit(newEvent);
+              }
+            }
+          )
+        }
+    );
   }
 
-  isSelectedPlace(place: Place): boolean {
-    return this.selectedPlaces.includes(place.id);
+  isUnavailablePlace(id: number): boolean {
+    let selected = this.selectedPlaces.includes(id);
+    return selected;
   }
 
-  onSelect(event: any) {
-    this.selectedPlaces.push(event.target.value);
-    console.log(this.selectedPlaces);
+  onSelect(event: any, i:number) {
+    this.selectedPlaces[i]=event.target.value;
   }
 }

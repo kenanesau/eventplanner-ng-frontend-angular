@@ -19,6 +19,6 @@ export class EventStoreService {
   }
 
   create(ev: Event): Observable<Event> {
-    return this.http.post<Event>(this.url + '/user/events', ev);
+    return this.http.post<Event>(this.url + '/user/events/create', ev);
   }
 }

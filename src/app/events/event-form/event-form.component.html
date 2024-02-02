@@ -15,15 +15,17 @@
     <div class="col-12">
       <div class="row g-3">
       <ng-container formArrayName="places">
-        <ng-container *ngFor="let selectedPlace of places.controls; let i = index">
-          <div class="col-md-11 col-sd-4">
-            <select class="form-select" aria-label="Ort-Auswahl" (change)="onSelect($event)">
-              <option selected>Auswahl</option>
+        <ng-container *ngFor="let placeForm of places.controls; let i = index" >
+          <!--pre>{{ placeForm.value | json }}</pre-->
+          <div class="col-11 places-form-row" [formGroup]="placeForm">
+            <select class="form-select" aria-label="Ort-Auswahl" (change)="onSelect($event, i)"
+              formControlName="placeId">
+              <option selected disabled>Auswahl</option>
               <option *ngFor="let place of availablePlaces"
-                      [value]="place.id" [disabled]="isSelectedPlace(place)">{{place.name}}</option>
+                      [value]="place.id" [disabled]="isUnavailablePlace(place.id)">{{place.name}}</option>
             </select>
           </div>
-          <div class="col-md-1 cols-sd-2">
+          <div class="col-1">
             <button type="button" class="btn btn-primary" (click)="deletePlace(i)"><i class="bi bi-dash-circle"></i></button>
           </div>
         </ng-container>
@@ -31,8 +33,10 @@
       </div>
     </div>
     <div class="col-12">
-      <button type="button" class="btn btn-primary" (click)="addPlace()"><i class="bi bi-plus-circle"></i></button>
+      <button type="button" class="btn btn-primary" (click)="addPlace()" [disabled]="availablePlaces.length==places.length"><i class="bi bi-plus-circle"></i></button>
     </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">Erstellen</button>
   </form>
 </ng-container>
 
@@ -42,3 +46,4 @@
   </div>
 </ng-template>
 
+<pre>{{ eventForm.value | json }}</pre>
