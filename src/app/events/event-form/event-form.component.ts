@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Event} from "../../shared/event";
 import {Place} from "../../shared/place";
@@ -55,9 +55,9 @@ export class EventFormComponent {
   @Output() changedEvent = new EventEmitter<Event>();
 
   eventForm = this.fb.group({
-    startTime: new FormControl( this.event.startTime.toString(), {
+    startTime: new FormControl( this.event.startTime?.toString()??null, {
       nonNullable: true } ),
-    endTime: new FormControl( this.event.endTime.toString(), {
+    endTime: new FormControl( this.event.endTime?.toString()??null, {
       nonNullable: true }),
     name: new FormControl( this.event.name, {
       nonNullable: true,
@@ -90,30 +90,32 @@ export class EventFormComponent {
     const bookedPlaces: Place[] = [];
 
     this.availablePlaces$.subscribe(
-        allPlaces => {
-          this.eventForm.controls.places.controls.forEach(
-            value => {
-              if (typeof value === 'object' && value!==undefined) {
-                const id: number = Number(value.get("placeId")?.value);
-                const place: Place|undefined = allPlaces.filter( place => place.id === id ).pop()
-                if (typeof place !== 'undefined') {
-                  bookedPlaces.push(place)
-                }
-                const newEvent: Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
-                this.changedEvent.emit(newEvent);
+      allPlaces => {
+        this.eventForm.controls.places.controls.forEach(
+          value => {
+            if (typeof value === 'object' && value!==undefined) {
+              const id: number = Number(value.get("placeId")?.value);
+              const place: Place|undefined = allPlaces.filter( place => place.id === id ).pop()
+              if (typeof place !== 'undefined') {
+                bookedPlaces.push(place)
               }
+              const newEvent: Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
+              this.changedEvent.emit(newEvent);
             }
-          )
-        }
+          }
+        )
+      }
     );
   }
 
   isUnavailablePlace(id: number): boolean {
     let selected = this.selectedPlaces.includes(id);
+    if (selected)
+      console.log(selected + ' Place ID=' + id + ' already selected! ' + this.selectedPlaces);
     return selected;
   }
 
   onSelect(event: any, i:number) {
-    this.selectedPlaces[i]=event.target.value;
+    this.selectedPlaces[i]=Number(event.target.value);
   }
 }
