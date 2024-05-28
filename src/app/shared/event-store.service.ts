@@ -15,14 +15,19 @@ export class EventStoreService {
   }
 
   getEvent(id: bigint): Observable<Event> {
-    return this.http.get<Event>( this.url + '/user/events' + id);
+    return this.http.get<Event>( this.url + '/user/events/' + id);
   }
 
   create(ev: Event): Observable<Event> {
     return this.http.post<Event>(this.url + '/user/events/create', ev);
   }
 
+  edit(ev: Event): Observable<Event> {
+    return this.http.put<Event>( this.url + '/user/events/edit/' + ev.id, ev);
+  }
+
   getEventCollissions(ev: Event): Observable<Event[]> {
     return this.http.post<Event[]>( this.url + '/user/events/checkcollisions', ev);
   }
+
 }

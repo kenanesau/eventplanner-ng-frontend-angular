@@ -1,5 +1,14 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {Component, EventEmitter, Inject, Input, LOCALE_ID, Output} from '@angular/core';
+import {
+  AsyncPipe,
+  DatePipe,
+  formatDate,
+  FormatWidth,
+  getLocaleDateTimeFormat,
+  JsonPipe,
+  NgForOf,
+  NgIf
+} from '@angular/common';
 import {Event} from "../../shared/event";
 import {Place} from "../../shared/place";
 import {
@@ -13,7 +22,7 @@ import {
 } from "@angular/forms";
 import {TimeSelectComponent} from "../time-select/time-select.component";
 import {PlaceStoreService} from "../../shared/place-store.service";
-import {map, Observable, switchMap} from "rxjs";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'ep-event-form',
@@ -23,49 +32,55 @@ import {map, Observable, switchMap} from "rxjs";
   styleUrls: ['./event-form.component.scss']
 })
 export class EventFormComponent {
-  _event: Event = {
-    id: -1,
-    name: '',
-    startTime: new Date().toDateString(),
-    endTime: new Date().toDateString(),
-    places: [
-      {
-        id: -1,
-        name: '',
-        locked: false,
-        lockedComment: '',
-      }
-    ]
-  }
+  _event?: Event;
   availablePlaces$: Observable<Place[]>;
   selectedPlaces: number[] = [];
 
-  constructor(private fb: FormBuilder, private placeService: PlaceStoreService) {
+  @Inject(LOCALE_ID) public locale: string;
+
+  constructor(private fb: FormBuilder, private placeService: PlaceStoreService, @Inject(LOCALE_ID) locale: string) {
+    this.locale = locale;
     this.availablePlaces$ = this.placeService.getAll();
   }
   @Input()
-  set event(event: Event) {
+  set event(event :Event) {
     this._event = {...event};
-    this._event.places = new Array<Place>();
-    event.places.forEach(
-      place => this._event.places.push({...place})
-    );
-  }
-  get event() { return this._event; }
-  @Output() changedEvent = new EventEmitter<Event>();
 
-  eventForm = this.fb.group({
-    startTime: new FormControl( this.event.startTime?.toString()??null, {
-      nonNullable: true } ),
-    endTime: new FormControl( this.event.endTime?.toString()??null, {
-      nonNullable: true }),
-    name: new FormControl( this.event.name, {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(255)
-      ]
-    }),
+    let start = null;
+    let end = null;
+    let format = getLocaleDateTimeFormat(this.locale, FormatWidth.Short);
+
+    if (this.event!=null) {
+      if (this.event.startTime!=null) start = this.event.startTime.slice(0, -13);
+      if (this.event.endTime!=null) end = this.event.endTime.slice(0, -13);
+    }
+    this.eventForm = this.fb.group({
+      startTime: new FormControl(start, {
+        nonNullable: true
+      }),
+      endTime: new FormControl('2024-05-28T17:42', {
+        nonNullable: true
+      }),
+      name: new FormControl(this.event?.name, {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.maxLength(255)
+        ]
+      }),
+      places: this.fb.array([])
+    });
+
+    if (event.places != null) {
+      event.places.forEach(
+        place => {
+          this._addPlace(place)
+        });
+    }
+  }
+  get event(): Event|undefined { return this._event; }
+  @Output() changedEvent = new EventEmitter<Event>();
+  eventForm :FormGroup = this.fb.group({
     places: this.fb.array([])
   });
 
@@ -73,12 +88,20 @@ export class EventFormComponent {
     return this.eventForm.controls["places"] as FormArray;
   }
 
-  addPlace() {
-    const placeForm:FormGroup = this.fb.group({
-      placeId: ['', Validators.required]
+  _addPlace(place :Place|undefined) {
+    const placeForm: FormGroup = this.fb.group({
+      placeId: [place == undefined ? '' : place.id, Validators.required]
     });
 
+    if (place !== undefined) {
+      this.selectedPlaces.push(place?.id);
+    }
+
     this.places.push(placeForm as FormGroup);
+  }
+
+  addPlace() {
+    this._addPlace(undefined);
   }
 
   deletePlace(placeIndex: number) {
@@ -91,7 +114,7 @@ export class EventFormComponent {
 
     this.availablePlaces$.subscribe(
       allPlaces => {
-        this.eventForm.controls.places.controls.forEach(
+        this.places.controls.forEach(
           value => {
             if (typeof value === 'object' && value!==undefined) {
               const id: number = Number(value.get("placeId")?.value);
@@ -99,7 +122,7 @@ export class EventFormComponent {
               if (typeof place !== 'undefined') {
                 bookedPlaces.push(place)
               }
-              const newEvent: Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
+              const newEvent :Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
               this.changedEvent.emit(newEvent);
             }
           }

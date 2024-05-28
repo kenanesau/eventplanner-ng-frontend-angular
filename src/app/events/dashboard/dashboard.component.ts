@@ -37,4 +37,8 @@ export class DashboardComponent {
 
   }
 
+  doEditEvent(event: Event) {
+    this.evService.edit(event);
+  }
+
 }

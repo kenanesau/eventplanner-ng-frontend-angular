@@ -13,6 +13,21 @@ import {Event} from "../../shared/event"
   styleUrls: ['./event-create.component.scss']
 })
 export class EventCreateComponent {
+  event : Event = {
+                    id: -1,
+                    name: '',
+                    startTime: new Date().toDateString(),
+                    endTime: new Date().toDateString(),
+                    places: [
+                      {
+                        id: -1,
+                        name: '',
+                        locked: false,
+                        lockedComment: '',
+                      }
+                    ]
+                  }
+
   constructor(private evService: EventStoreService, private router: Router) {}
 
   doCreateEvent(changedEvent: Event) {

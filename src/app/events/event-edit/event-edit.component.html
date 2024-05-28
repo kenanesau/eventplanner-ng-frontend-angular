@@ -1,0 +1,7 @@
+<ep-event-form *ngIf="event$ | async as ev; else loading"
+  [event]="ev">
+</ep-event-form>
+
+<ng-template #loading>
+  <p>Loading....</p>
+</ng-template>

@@ -1,3 +1,4 @@
 <ep-event
   *ngFor="let ev of events; index as i"
-  [event]="ev"></ep-event>
+  [event]="ev"
+  (editEvent)="doEditEvent($event)"></ep-event>
