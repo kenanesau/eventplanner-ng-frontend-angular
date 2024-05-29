@@ -1,5 +1,5 @@
-<ep-event-form *ngIf="event$ | async as ev; else loading"
-  [event]="ev">
+<ep-event-form class="container" *ngIf="event$ | async as ev; else loading"
+              [event]="ev" (changedEvent)="doEditEvent($event)">
 </ep-event-form>
 
 <ng-template #loading>

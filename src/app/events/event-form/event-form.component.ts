@@ -2,7 +2,6 @@ import {Component, EventEmitter, Inject, Input, LOCALE_ID, Output} from '@angula
 import {
   AsyncPipe,
   DatePipe,
-  formatDate,
   FormatWidth,
   getLocaleDateTimeFormat,
   JsonPipe,
@@ -48,19 +47,14 @@ export class EventFormComponent {
 
     let start = null;
     let end = null;
-    let format = getLocaleDateTimeFormat(this.locale, FormatWidth.Short);
 
     if (this.event!=null) {
       if (this.event.startTime!=null) start = this.event.startTime.slice(0, -13);
       if (this.event.endTime!=null) end = this.event.endTime.slice(0, -13);
     }
     this.eventForm = this.fb.group({
-      startTime: new FormControl(start, {
-        nonNullable: true
-      }),
-      endTime: new FormControl('2024-05-28T17:42', {
-        nonNullable: true
-      }),
+      startTime: new FormControl(start, {nonNullable: true}),
+      endTime: new FormControl(end, {nonNullable: true}),
       name: new FormControl(this.event?.name, {
         nonNullable: true,
         validators: [
@@ -117,12 +111,13 @@ export class EventFormComponent {
         this.places.controls.forEach(
           value => {
             if (typeof value === 'object' && value!==undefined) {
-              const id: number = Number(value.get("placeId")?.value);
-              const place: Place|undefined = allPlaces.filter( place => place.id === id ).pop()
+              const placeId: number = Number(value.get("placeId")?.value);
+              const place: Place|undefined = allPlaces.filter( place => place.id === placeId ).pop()
               if (typeof place !== 'undefined') {
                 bookedPlaces.push(place)
               }
-              const newEvent :Event = {id: -1, ...this.eventForm.getRawValue(), places: bookedPlaces};
+              const id: number = this.event?.id??-1;
+              const newEvent :Event = {id, ...this.eventForm.getRawValue(), places: bookedPlaces};
               this.changedEvent.emit(newEvent);
             }
           }

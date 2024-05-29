@@ -19,11 +19,17 @@ import {AsyncPipe, NgIf} from "@angular/common";
 })
 export class EventEditComponent {
   event$: Observable<Event>;
-  constructor(private route: ActivatedRoute, private router: Router, private es: EventStoreService) {
+  constructor(private route: ActivatedRoute, private router: Router, private evService: EventStoreService) {
 
     this.event$ = this.route.paramMap.pipe(
       map(params => params.get('id')!),
-      switchMap(id => this.es.getEvent(BigInt(id)))
+      switchMap(id => this.evService.getEvent(BigInt(id)))
     );
+  }
+
+  doEditEvent(event: Event) {
+    this.evService.edit(event).subscribe(
+      ev => this.router.navigate(['/events'])
+    )
   }
 }
