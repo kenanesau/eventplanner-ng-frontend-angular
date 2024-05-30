@@ -36,7 +36,10 @@
       <button type="button" class="btn btn-primary" (click)="addPlace()" [disabled]="availablePlaces.length==places.length"><i class="bi bi-plus-circle"></i></button>
     </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">Erstellen</button>
+    <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">
+      <div *ngIf="event.id==-1">Erstellen</div>
+      <div *ngIf="event.id>0">Speichern</div>
+    </button>
   </form>
 </ng-container>
 

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DatePipe, NgIf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {Event} from "../../shared/event";
 import {TimeSelectComponent} from "../time-select/time-select.component";
 import {RouterLink} from "@angular/router";
@@ -7,7 +7,7 @@ import {RouterLink} from "@angular/router";
 @Component({
   selector: 'ep-event',
   standalone: true,
-  imports: [NgIf, DatePipe, TimeSelectComponent, RouterLink],
+    imports: [NgIf, DatePipe, TimeSelectComponent, RouterLink, NgForOf],
   templateUrl: './event.component.html',
   styleUrls: ['./event.component.scss']
 })

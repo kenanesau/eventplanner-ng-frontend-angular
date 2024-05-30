@@ -8,10 +8,6 @@
       <a type="button" class="btn btn-primary" [routerLink]="['/events','edit', event.id]" routerLinkActive="active">
         <i class="bi bi-pencil"></i>
       </a>
-
-      <!--button type="button" (click)="doEditEvent()" class="btn btn-primary">
-          <i class="bi bi-pencil"></i>
-        </button-->
     </div>
   </div>
   <div class="row g-0">
@@ -20,7 +16,11 @@
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        put more content here...
+        <p>Gebuchte Räume:
+          <ng-container *ngFor="let place of event.places; let isLast=last">
+            {{place.name}}{{isLast?'':', '}}
+          </ng-container>
+        </p>
       </div>
     </div>
 

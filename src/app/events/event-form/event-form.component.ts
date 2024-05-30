@@ -104,24 +104,22 @@ export class EventFormComponent {
   }
 
   submitForm() {
-    const bookedPlaces: Place[] = [];
-
     this.availablePlaces$.subscribe(
       allPlaces => {
+        const id: number = this.event?.id??-1;
+        let newEvent: Event  = {id, ...this.eventForm.getRawValue(), places: []};
         this.places.controls.forEach(
           value => {
             if (typeof value === 'object' && value!==undefined) {
               const placeId: number = Number(value.get("placeId")?.value);
               const place: Place|undefined = allPlaces.filter( place => place.id === placeId ).pop()
               if (typeof place !== 'undefined') {
-                bookedPlaces.push(place)
+                newEvent.places.push(place)
               }
-              const id: number = this.event?.id??-1;
-              const newEvent :Event = {id, ...this.eventForm.getRawValue(), places: bookedPlaces};
-              this.changedEvent.emit(newEvent);
             }
           }
         )
+        this.changedEvent.emit(newEvent);
       }
     );
   }
